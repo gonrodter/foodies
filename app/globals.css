@@ -31,6 +31,40 @@ main {
   height: 100%;
 }
 
+/* ---- mobile-first app shell ---- */
+.appShell {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg);
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(20, 23, 28, 0.12);
+}
+
+/* full-height area above the bottom nav */
+.appMain {
+  position: absolute;
+  inset: 0 0 64px 0;
+}
+
+/* scrollable content screens (everything except the map) */
+.screen {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 16px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font-family: inherit;
+}
+
 .mapboxgl-ctrl-logo,
 .mapboxgl-ctrl-attrib {
   opacity: 0.35;

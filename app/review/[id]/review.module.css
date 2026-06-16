@@ -1,0 +1,116 @@
+.body {
+  padding: 0 16px 16px;
+}
+.placeLink {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  margin-bottom: 10px;
+}
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.ratingNum {
+  font-weight: 800;
+  font-size: 16px;
+}
+.price {
+  margin-left: auto;
+  font-weight: 800;
+  color: var(--ink);
+}
+.photoRow {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+}
+.photo {
+  width: 220px;
+  height: 160px;
+  flex: none;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #e7eaf0;
+}
+.text {
+  font-size: 16px;
+  line-height: 1.55;
+  color: #2b2f36;
+  margin: 0 0 16px;
+}
+.block {
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+.label {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #9aa0aa;
+  margin-bottom: 4px;
+}
+.creator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  margin: 16px 0 12px;
+}
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #d8dbe0;
+}
+.creatorName {
+  font-weight: 800;
+}
+.creatorHandle {
+  font-size: 13px;
+  color: #8a8f98;
+}
+.viewProfile {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.date {
+  font-size: 13px;
+  color: #8a8f98;
+}
+.ownerActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.edit,
+.delete {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+.edit {
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+}
+.delete {
+  background: #ffe9e9;
+  color: #d33;
+}

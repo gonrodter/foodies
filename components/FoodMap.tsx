@@ -1,36 +1,37 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import Map, { Marker, MapRef } from "react-map-gl";
 import useSupercluster from "use-supercluster";
 import type { BBox } from "geojson";
-import { mockReviews } from "@/lib/mockReviews";
-import { Review } from "@/lib/types";
+import { getPlacesWithStats, useStore } from "@/lib/store";
+import { PlaceWithStats, CATEGORY_EMOJI } from "@/lib/types";
 import styles from "./FoodMap.module.css";
 
 const SEVILLE = { longitude: -5.9925, latitude: 37.3905, zoom: 14 };
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-type PointProps = { cluster: false; review: Review };
+type PointProps = { cluster: false; place: PlaceWithStats };
 type ClusterProps = { cluster: true; point_count: number };
 
 export default function FoodMap() {
   const mapRef = useRef<MapRef>(null);
   const [bounds, setBounds] = useState<BBox>();
   const [zoom, setZoom] = useState(SEVILLE.zoom);
-  const [selected, setSelected] = useState<Review | null>(null);
+  const [selected, setSelected] = useState<PlaceWithStats | null>(null);
+
+  useStore();
+  const places = getPlacesWithStats();
 
   const points = useMemo(
     () =>
-      mockReviews.map((r) => ({
+      places.map((p) => ({
         type: "Feature" as const,
-        properties: { cluster: false as const, review: r },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [r.lng, r.lat],
-        },
+        properties: { cluster: false as const, place: p },
+        geometry: { type: "Point" as const, coordinates: [p.lng, p.lat] },
       })),
-    []
+    [places]
   );
 
   const { clusters, supercluster } = useSupercluster({
@@ -102,19 +103,21 @@ export default function FoodMap() {
             );
           }
 
-          const review = (props as PointProps).review;
-          const active = selected?.id === review.id;
+          const place = (props as PointProps).place;
+          const active = selected?.id === place.id;
           return (
-            <Marker key={review.id} longitude={lng} latitude={lat}>
+            <Marker key={place.id} longitude={lng} latitude={lat}>
               <button
                 className={`${styles.pin} ${active ? styles.pinActive : ""}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelected(review);
+                  setSelected(place);
                   flyTo(lng, lat, Math.max(zoom, 15));
                 }}
               >
-                <span className={styles.pinEmoji}>{review.emoji}</span>
+                <span className={styles.pinEmoji}>
+                  {CATEGORY_EMOJI[place.category]}
+                </span>
                 <span className={styles.pinCheck}>✓</span>
               </button>
             </Marker>
@@ -128,20 +131,42 @@ export default function FoodMap() {
       </div>
 
       {selected && (
-        <div className={styles.card} onClick={(e) => e.stopPropagation()}>
-          <div className={styles.cardEmoji}>{selected.emoji}</div>
-          <div className={styles.cardBody}>
-            <div className={styles.cardPlace}>{selected.place}</div>
-            <div className={styles.cardMeta}>
-              {"★".repeat(selected.rating)}
-              <span className={styles.cardAuthor}>@{selected.author}</span>
+        <Link
+          href={`/place/${selected.id}`}
+          className={styles.card}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {selected.photos[0] ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              className={styles.cardEmoji}
+              src={selected.photos[0]}
+              alt={selected.name}
+              style={{ objectFit: "cover" }}
+            />
+          ) : (
+            <div className={styles.cardEmoji}>
+              {CATEGORY_EMOJI[selected.category]}
             </div>
-            <div className={styles.cardComment}>{selected.comment}</div>
+          )}
+          <div className={styles.cardBody}>
+            <div className={styles.cardPlace}>{selected.name}</div>
+            <div className={styles.cardMeta}>
+              {"★".repeat(Math.round(selected.avgRating))}
+              <span className={styles.cardAuthor}>
+                {selected.reviewCount} review
+                {selected.reviewCount === 1 ? "" : "s"}
+                {selected.avgPrice != null ? ` · ~€${selected.avgPrice}` : ""}
+              </span>
+            </div>
+            <div className={styles.cardComment}>
+              {selected.address ?? selected.city} · Tap to open →
+            </div>
           </div>
-        </div>
+        </Link>
       )}
 
-      <div className={styles.placesPill}>{mockReviews.length} places</div>
+      <div className={styles.placesPill}>{places.length} places</div>
     </div>
   );
 }

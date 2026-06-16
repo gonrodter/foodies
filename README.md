@@ -26,13 +26,22 @@ Open http://localhost:3000
 
 ## Current (MVP)
 
-- Pitched 3D Seville map
-- Custom emoji review pins with green-check + clustering (`2+`)
-- Tap pin → floating review card; tap cluster → zoom in
-- Mock reviews in `lib/mockReviews.ts`
+Mobile-first app shell with bottom nav (Map · Search · Add · Profile).
+
+- **Map** (`/`): pitched 3D Seville map, emoji pins per place, clustering, tap pin → preview card (name, rating, price, review count, photo) → place detail
+- **Place detail** (`/place/[id]`): hero, avg rating, price, all reviews, add-review
+- **Review detail** (`/review/[id]`): photos, rating, price, dishes, text, creator preview, date; owner can edit/delete
+- **Create review** (`/create`): place, location, rating, price, dishes, multiple photo URLs, tags
+- **Creator profile** (`/profile/[username]`): bio, city, counts, reviews, follow/unfollow
+- **Search** (`/search`): by name/city + category & rating filters
+
+Data: local-first store (`lib/store.ts`) seeded with Seville data (`lib/seed.ts`), persisted to `localStorage`. Mock auth via a current user (switch on your own profile to test follows).
+
+See `MVP_AUDIT.md` for architecture and `supabase/migrations/0001_init.sql` for the production schema.
 
 ## Next
 
-- Supabase `reviews` table (PostGIS) + realtime subscription → live pins
-- Auth + create-review flow (photo upload, rating, place search)
-- Filters by category, "add place" pin
+- Swap `lib/store.ts` queries for Supabase (schema ready in `supabase/migrations`)
+- Real auth + Supabase Storage photo upload
+- Realtime pin subscription; Mapbox geocoding for place location
+- Premium creator profiles (data model extension point)
