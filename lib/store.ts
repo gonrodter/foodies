@@ -182,6 +182,18 @@ export const getReviewsByUser = (userId: string): ReviewWithRefs[] =>
     .filter((r): r is ReviewWithRefs => !!r)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
+// Feed of reviews from creators the user follows (most recent first).
+export const getFollowingFeed = (userId: string): ReviewWithRefs[] => {
+  const ids = new Set(
+    cache.follows.filter((f) => f.followerId === userId).map((f) => f.followingId)
+  );
+  return cache.reviews
+    .filter((r) => ids.has(r.userId))
+    .map(withRefs)
+    .filter((r): r is ReviewWithRefs => !!r)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+};
+
 export const getReviewById = (id: string): ReviewWithRefs | undefined => {
   const r = cache.reviews.find((x) => x.id === id);
   return r ? withRefs(r) : undefined;

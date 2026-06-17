@@ -42,10 +42,10 @@ export default function ReviewCard({ review, showPlace }: Props) {
 
       <div className={styles.metaRow}>
         {review.pricePerPerson != null && (
-          <span className={styles.price}>€{review.pricePerPerson}/person</span>
+          <span className={styles.price}>€{review.pricePerPerson}/persona</span>
         )}
         <span className={styles.dot}>·</span>
-        <span>{new Date(review.createdAt).toLocaleDateString()}</span>
+        <span>{new Date(review.createdAt).toLocaleDateString("es-ES")}</span>
       </div>
 
       {review.tags.length > 0 && (

@@ -4,8 +4,8 @@ import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
-  title: "Foody — Seville",
-  description: "Real-time foodie reviews on a map.",
+  title: "Foody — Sevilla",
+  description: "Reseñas gastronómicas en un mapa.",
 };
 
 export const viewport: Viewport = {
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         <div className="appShell">
           <div className="appMain">{children}</div>

@@ -48,8 +48,8 @@ export default function FoodMap() {
     return (
       <div className={styles.tokenWarning}>
         <p>
-          Add <code>NEXT_PUBLIC_MAPBOX_TOKEN</code> to <code>.env.local</code> to
-          load the map.
+          Añade <code>NEXT_PUBLIC_MAPBOX_TOKEN</code> a <code>.env.local</code>{" "}
+          para cargar el mapa.
         </p>
       </div>
     );
@@ -126,7 +126,7 @@ export default function FoodMap() {
       </Map>
 
       <div className={styles.cityLabel}>
-        <span className={styles.cityTop}>Seville,</span>
+        <span className={styles.cityTop}>Sevilla,</span>
         <span className={styles.cityBottom}>ESP</span>
       </div>
 
@@ -154,19 +154,19 @@ export default function FoodMap() {
             <div className={styles.cardMeta}>
               {"★".repeat(Math.round(selected.avgRating))}
               <span className={styles.cardAuthor}>
-                {selected.reviewCount} review
+                {selected.reviewCount} reseña
                 {selected.reviewCount === 1 ? "" : "s"}
                 {selected.avgPrice != null ? ` · ~€${selected.avgPrice}` : ""}
               </span>
             </div>
             <div className={styles.cardComment}>
-              {selected.address ?? selected.city} · Tap to open →
+              {selected.address ?? selected.city} · Toca para abrir →
             </div>
           </div>
         </Link>
       )}
 
-      <div className={styles.placesPill}>{places.length} places</div>
+      <div className={styles.placesPill}>{places.length} sitios</div>
     </div>
   );
 }

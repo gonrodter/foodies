@@ -19,7 +19,7 @@ export default function PlaceCard({ place }: { place: PlaceWithStats }) {
           <span>{place.avgRating.toFixed(1)}</span>
           <span className={styles.dot}>·</span>
           <span>
-            {place.reviewCount} review{place.reviewCount === 1 ? "" : "s"}
+            {place.reviewCount} reseña{place.reviewCount === 1 ? "" : "s"}
           </span>
           {place.avgPrice != null && (
             <>

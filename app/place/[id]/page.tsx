@@ -21,7 +21,7 @@ export default function PlaceDetail() {
   const place = getPlaceWithStats(id);
 
   if (!ready) {
-    return <div className={ui.empty}>Loading…</div>;
+    return <div className={ui.empty}>Cargando…</div>;
   }
 
   if (!place) {
@@ -31,11 +31,11 @@ export default function PlaceDetail() {
           <button className={ui.back} onClick={() => router.back()}>
             ←
           </button>
-          <div className={ui.title}>Place</div>
+          <div className={ui.title}>Sitio</div>
         </div>
         <div className={ui.empty}>
-          <strong>Place not found</strong>
-          It may have been removed.
+          <strong>Sitio no encontrado</strong>
+          Puede que se haya eliminado.
         </div>
       </div>
     );
@@ -67,12 +67,12 @@ export default function PlaceDetail() {
           <span style={{ fontWeight: 800 }}>{place.avgRating.toFixed(1)}</span>
           <span className={ui.dot}>·</span>
           <span>
-            {place.reviewCount} review{place.reviewCount === 1 ? "" : "s"}
+            {place.reviewCount} reseña{place.reviewCount === 1 ? "" : "s"}
           </span>
           {place.avgPrice != null && (
             <>
               <span className={ui.dot}>·</span>
-              <span className={ui.price}>~€{place.avgPrice}/person</span>
+              <span className={ui.price}>~€{place.avgPrice}/persona</span>
             </>
           )}
         </div>
@@ -82,7 +82,7 @@ export default function PlaceDetail() {
           href={`/create?placeId=${place.id}`}
           className={styles.addReview}
         >
-          + Add a review
+          + Añadir reseña
         </Link>
       </div>
 
@@ -95,7 +95,7 @@ export default function PlaceDetail() {
         </div>
       )}
 
-      <h2 className={styles.section}>Reviews</h2>
+      <h2 className={styles.section}>Reseñas</h2>
       <div className={ui.list}>
         {reviews.map((r) => (
           <ReviewCard key={r.id} review={r} />

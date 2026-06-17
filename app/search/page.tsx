@@ -24,13 +24,13 @@ export default function Search() {
   return (
     <div className={ui.screen}>
       <div className={ui.header}>
-        <div className={ui.title}>Discover</div>
+        <div className={ui.title}>Descubre</div>
       </div>
 
       <div className={styles.searchWrap}>
         <input
           className={styles.search}
-          placeholder="Search places or city…"
+          placeholder="Busca sitios o ciudad…"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           autoFocus
@@ -42,7 +42,7 @@ export default function Search() {
           className={`${styles.chip} ${!cat ? styles.on : ""}`}
           onClick={() => setCat(null)}
         >
-          All
+          Todo
         </button>
         {CATEGORIES.map((c) => (
           <button
@@ -61,15 +61,15 @@ export default function Search() {
             className={`${styles.chip} ${minRating === r ? styles.on : ""}`}
             onClick={() => setMinRating(r)}
           >
-            {r === 0 ? "Any rating" : `${r}★+`}
+            {r === 0 ? "Cualquiera" : `${r}★+`}
           </button>
         ))}
       </div>
 
       {results.length === 0 ? (
         <div className={ui.empty}>
-          <strong>No places found</strong>
-          Try a different search or filter.
+          <strong>Ningún sitio encontrado</strong>
+          Prueba otra búsqueda o filtro.
         </div>
       ) : (
         <div className={ui.list}>

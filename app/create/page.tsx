@@ -62,9 +62,9 @@ function CreateForm() {
   };
 
   const submit = async () => {
-    if (!placeName.trim()) return setError("Add a place name.");
-    if (rating < 1) return setError("Pick a rating.");
-    if (!text.trim()) return setError("Write a short review.");
+    if (!placeName.trim()) return setError("Añade el nombre del sitio.");
+    if (rating < 1) return setError("Elige una valoración.");
+    if (!text.trim()) return setError("Escribe una reseña corta.");
 
     const dishList = dishes
       .split(",")
@@ -103,7 +103,9 @@ function CreateForm() {
       }
     } catch (e) {
       setSaving(false);
-      setError(e instanceof Error ? e.message : "Could not save. Try again.");
+      setError(
+        e instanceof Error ? e.message : "No se pudo guardar. Inténtalo de nuevo."
+      );
     }
   };
 
@@ -113,14 +115,14 @@ function CreateForm() {
         <button className={ui.back} onClick={() => router.back()}>
           ←
         </button>
-        <div className={ui.title}>{existing ? "Edit review" : "New review"}</div>
+        <div className={ui.title}>{existing ? "Editar reseña" : "Nueva reseña"}</div>
       </div>
 
       <div className={styles.form}>
-        <label className={styles.label}>Place</label>
+        <label className={styles.label}>Sitio</label>
         <input
           className={styles.input}
-          placeholder="Restaurant / place name"
+          placeholder="Nombre del restaurante / sitio"
           value={placeName}
           disabled={placeLocked}
           onChange={(e) => setPlaceName(e.target.value)}
@@ -130,21 +132,21 @@ function CreateForm() {
           <>
             <input
               className={styles.input}
-              placeholder="Address (optional)"
+              placeholder="Dirección (opcional)"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
             <div className={styles.row}>
               <input
                 className={styles.input}
-                placeholder="Latitude"
+                placeholder="Latitud"
                 inputMode="decimal"
                 value={lat}
                 onChange={(e) => setLat(e.target.value)}
               />
               <input
                 className={styles.input}
-                placeholder="Longitude"
+                placeholder="Longitud"
                 inputMode="decimal"
                 value={lng}
                 onChange={(e) => setLng(e.target.value)}
@@ -164,7 +166,7 @@ function CreateForm() {
           </>
         )}
 
-        <label className={styles.label}>Rating</label>
+        <label className={styles.label}>Valoración</label>
         <div className={styles.stars}>
           {[1, 2, 3, 4, 5].map((n) => (
             <button
@@ -178,43 +180,43 @@ function CreateForm() {
           ))}
         </div>
 
-        <label className={styles.label}>Price per person (€)</label>
+        <label className={styles.label}>Precio por persona (€)</label>
         <input
           className={styles.input}
-          placeholder="e.g. 20"
+          placeholder="ej. 20"
           inputMode="numeric"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
 
-        <label className={styles.label}>Dishes ordered</label>
+        <label className={styles.label}>Platos pedidos</label>
         <input
           className={styles.input}
-          placeholder="Comma separated, e.g. Solomillo, Salmorejo"
+          placeholder="Separados por comas, ej. Solomillo, Salmorejo"
           value={dishes}
           onChange={(e) => setDishes(e.target.value)}
         />
 
-        <label className={styles.label}>Review</label>
+        <label className={styles.label}>Reseña</label>
         <textarea
           className={styles.textarea}
-          placeholder="What made it good?"
+          placeholder="¿Qué te gustó?"
           rows={4}
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
 
-        <label className={styles.label}>Photos</label>
+        <label className={styles.label}>Fotos</label>
         <div className={styles.row}>
           <input
             className={styles.input}
-            placeholder="Paste image URL"
+            placeholder="Pega la URL de una imagen"
             value={photoInput}
             onChange={(e) => setPhotoInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addPhoto())}
           />
           <button className={styles.addBtn} onClick={addPhoto} type="button">
-            Add
+            Añadir
           </button>
         </div>
         {photos.length > 0 && (
@@ -234,7 +236,7 @@ function CreateForm() {
           </div>
         )}
 
-        <label className={styles.label}>Tags</label>
+        <label className={styles.label}>Etiquetas</label>
         <div className={styles.chips}>
           {TAGS.map((t) => (
             <button
@@ -250,7 +252,7 @@ function CreateForm() {
         {error && <div className={styles.error}>{error}</div>}
 
         <button className={styles.submit} onClick={submit} disabled={saving}>
-          {saving ? "Saving…" : existing ? "Save changes" : "Publish review"}
+          {saving ? "Guardando…" : existing ? "Guardar cambios" : "Publicar reseña"}
         </button>
       </div>
     </div>
@@ -259,7 +261,7 @@ function CreateForm() {
 
 export default function CreatePage() {
   return (
-    <Suspense fallback={<div className={ui.empty}>Loading…</div>}>
+    <Suspense fallback={<div className={ui.empty}>Cargando…</div>}>
       <CreateForm />
     </Suspense>
   );

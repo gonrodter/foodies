@@ -25,14 +25,14 @@ export default function Profile() {
   const me = getCurrentUser();
 
   if (!ready) {
-    return <div className={ui.empty}>Loading…</div>;
+    return <div className={ui.empty}>Cargando…</div>;
   }
 
   if (!user) {
     return (
       <div className={ui.screen}>
         <div className={ui.empty}>
-          <strong>Creator not found</strong>@{username} doesn’t exist.
+          <strong>Creador no encontrado</strong>@{username} no existe.
         </div>
       </div>
     );
@@ -58,21 +58,21 @@ export default function Profile() {
         <div className={styles.stats}>
           <div className={styles.stat}>
             <strong>{reviews.length}</strong>
-            <span>reviews</span>
+            <span>reseñas</span>
           </div>
           <div className={styles.stat}>
             <strong>{followerCount(user.id)}</strong>
-            <span>followers</span>
+            <span>seguidores</span>
           </div>
           <div className={styles.stat}>
             <strong>{followingCount(user.id)}</strong>
-            <span>following</span>
+            <span>siguiendo</span>
           </div>
         </div>
 
         {isMe ? (
           <label className={styles.switcher}>
-            Viewing as
+            Viendo como
             <select
               value={me?.id ?? ""}
               onChange={(e) => setCurrentUser(e.target.value)}
@@ -89,14 +89,16 @@ export default function Profile() {
             className={`${styles.follow} ${following ? styles.following : ""}`}
             onClick={() => toggleFollow(user.id)}
           >
-            {following ? "Following ✓" : "+ Follow taste"}
+            {following ? "Siguiendo ✓" : "+ Seguir su gusto"}
           </button>
         )}
       </div>
 
-      <h2 className={styles.section}>Places {user.name.split(" ")[0]} recommends</h2>
+      <h2 className={styles.section}>
+        Sitios que recomienda {user.name.split(" ")[0]}
+      </h2>
       {reviews.length === 0 ? (
-        <div className={ui.empty}>No reviews yet.</div>
+        <div className={ui.empty}>Aún no hay reseñas.</div>
       ) : (
         <div className={ui.list}>
           {reviews.map((r) => (

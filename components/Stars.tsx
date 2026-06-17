@@ -5,7 +5,7 @@ export default function Stars({ rating, size = 14 }: Props) {
   const full = Math.round(rating);
   return (
     <span
-      aria-label={`${rating.toFixed(1)} out of 5`}
+      aria-label={`${rating.toFixed(1)} de 5`}
       style={{ color: "#f5a623", fontSize: size, letterSpacing: 1 }}
     >
       {"★".repeat(full)}

@@ -1,37 +1,80 @@
+/* floating container — sits over content, respects safe area */
 .nav {
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  bottom: 0;
+  padding: 0 16px calc(12px + env(safe-area-inset-bottom));
   display: flex;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(20, 23, 28, 0.08);
+  justify-content: center;
+  pointer-events: none;
   z-index: 50;
 }
 
+/* the pill itself */
+.pill {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 380px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 26px;
+  box-shadow: 0 12px 34px rgba(20, 23, 28, 0.18), 0 2px 8px rgba(20, 23, 28, 0.08);
+  overflow: visible;
+}
+
+/* regular tab */
 .tab {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  color: #9aa0aa;
-  font-weight: 700;
-  transition: color 0.15s ease;
+  gap: 3px;
+  color: #a2a8b2;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.tab:active {
+  transform: scale(0.92);
 }
 .tab.active {
-  color: var(--accent);
-}
-
-.icon {
-  font-size: 20px;
-  line-height: 1;
-  filter: grayscale(0.2);
+  color: var(--ink);
 }
 .label {
-  font-size: 11px;
-  letter-spacing: -0.2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+.tab.active .label {
+  color: var(--ink);
+}
+
+/* elevated central create button — the focal point */
+.create {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  margin: 0 6px;
+  transform: translateY(-14px);
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #2b2f36, var(--ink));
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(20, 23, 28, 0.32);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.create:active {
+  transform: translateY(-14px) scale(0.94);
+}
+.createActive {
+  background: linear-gradient(160deg, #3570ff, var(--accent));
+  box-shadow: 0 10px 24px rgba(42, 109, 255, 0.42);
 }
