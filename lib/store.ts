@@ -342,6 +342,77 @@ export const addReview = async (input: NewReviewInput): Promise<Review> => {
   return review;
 };
 
+// Add a place row (from /api/places/upsert) into the cache if not present.
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const cachePlace = (row: any): Place => {
+  const existing = cache.places.find((p) => p.id === row.id);
+  if (existing) return existing;
+  const place = mapPlace(row);
+  cache.places = [...cache.places, place];
+  notify();
+  return place;
+};
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export type ReviewFields = {
+  rating: number;
+  pricePerPerson?: number;
+  dishes: string[];
+  text: string;
+  photos: string[];
+  tags: Tag[];
+};
+
+// Create a review for an existing internal place (selected via Geoapify search).
+export const addReviewForPlace = async (
+  placeId: string,
+  fields: ReviewFields
+): Promise<Review> => {
+  if (!currentUserId) throw new Error("No current user");
+  const place = cache.places.find((p) => p.id === placeId);
+  const emoji = CATEGORY_EMOJI[place?.category ?? "other"];
+  const row = {
+    user_id: currentUserId,
+    place_id: placeId,
+    rating: fields.rating,
+    price_per_person: fields.pricePerPerson ?? null,
+    dishes: fields.dishes,
+    text: fields.text,
+    photos: fields.photos,
+    tags: fields.tags,
+    emoji,
+  };
+  let review: Review;
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("reviews")
+      .insert(row)
+      .select()
+      .single();
+    if (error) throw error;
+    review = mapReview(data);
+  } else {
+    const now = new Date().toISOString();
+    review = {
+      id: "r" + uidStr(),
+      userId: currentUserId,
+      placeId,
+      rating: fields.rating,
+      pricePerPerson: fields.pricePerPerson,
+      dishes: fields.dishes,
+      text: fields.text,
+      photos: fields.photos,
+      tags: fields.tags,
+      emoji,
+      createdAt: now,
+      updatedAt: now,
+    };
+  }
+  cache.reviews = [...cache.reviews, review];
+  notify();
+  return review;
+};
+
 export const updateReview = async (
   id: string,
   patch: Partial<NewReviewInput>

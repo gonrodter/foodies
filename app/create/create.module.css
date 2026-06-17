@@ -45,6 +45,39 @@
   margin-top: 8px;
 }
 
+.lockedPlace {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+}
+.lockedName {
+  display: block;
+  font-weight: 800;
+  font-size: 15px;
+}
+.lockedAddr {
+  display: block;
+  font-size: 13px;
+  color: #8a8f98;
+  margin-top: 2px;
+}
+.changePlace {
+  flex: none;
+  border: none;
+  background: #eef1f6;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;

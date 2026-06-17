@@ -3,18 +3,16 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  addReview,
+  addReviewForPlace,
   updateReview,
   getReviewById,
   getPlaceWithStats,
   useStore,
 } from "@/lib/store";
-import { Category, Tag, TAGS, CATEGORY_EMOJI } from "@/lib/types";
+import { Tag, TAGS } from "@/lib/types";
+import PlaceSearch, { SelectedPlace } from "@/components/PlaceSearch";
 import ui from "@/components/ui.module.css";
 import styles from "./create.module.css";
-
-const CATEGORIES: Category[] = ["food", "coffee", "bar", "dessert", "other"];
-const SEVILLE = { lat: 37.3891, lng: -5.9845 };
 
 function CreateForm() {
   const router = useRouter();
@@ -27,15 +25,14 @@ function CreateForm() {
     ? getPlaceWithStats(params.get("placeId")!)
     : undefined;
 
-  const lockedPlace = existing?.place ?? presetPlace;
+  // place fixed when editing or adding to a known place; otherwise pick via search
+  const fixedPlace: SelectedPlace | undefined = existing
+    ? { id: existing.place.id, name: existing.place.name, address: existing.place.address, city: existing.place.city }
+    : presetPlace
+    ? { id: presetPlace.id, name: presetPlace.name, address: presetPlace.address, city: presetPlace.city }
+    : undefined;
 
-  const [placeName, setPlaceName] = useState(lockedPlace?.name ?? "");
-  const [address, setAddress] = useState(lockedPlace?.address ?? "");
-  const [lat, setLat] = useState(String(lockedPlace?.lat ?? SEVILLE.lat));
-  const [lng, setLng] = useState(String(lockedPlace?.lng ?? SEVILLE.lng));
-  const [category, setCategory] = useState<Category>(
-    lockedPlace?.category ?? existing?.place.category ?? "food"
-  );
+  const [selected, setSelected] = useState<SelectedPlace | undefined>(fixedPlace);
   const [rating, setRating] = useState(existing?.rating ?? 0);
   const [price, setPrice] = useState(
     existing?.pricePerPerson != null ? String(existing.pricePerPerson) : ""
@@ -48,7 +45,7 @@ function CreateForm() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const placeLocked = !!lockedPlace;
+  const placeLocked = !!fixedPlace;
 
   const toggleTag = (t: Tag) =>
     setTags((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
@@ -62,7 +59,7 @@ function CreateForm() {
   };
 
   const submit = async () => {
-    if (!placeName.trim()) return setError("Añade el nombre del sitio.");
+    if (!selected) return setError("Elige un sitio.");
     if (rating < 1) return setError("Elige una valoración.");
     if (!text.trim()) return setError("Escribe una reseña corta.");
 
@@ -70,35 +67,23 @@ function CreateForm() {
       .split(",")
       .map((d) => d.trim())
       .filter(Boolean);
-    const priceNum = price ? Number(price) : undefined;
+    const fields = {
+      rating,
+      pricePerPerson: price ? Number(price) : undefined,
+      dishes: dishList,
+      text: text.trim(),
+      photos,
+      tags,
+    };
 
     setError("");
     setSaving(true);
     try {
       if (existing) {
-        await updateReview(existing.id, {
-          rating,
-          pricePerPerson: priceNum,
-          dishes: dishList,
-          text: text.trim(),
-          photos,
-          tags,
-        });
+        await updateReview(existing.id, fields);
         router.push(`/review/${existing.id}`);
       } else {
-        const review = await addReview({
-          placeName,
-          address,
-          lat: Number(lat) || SEVILLE.lat,
-          lng: Number(lng) || SEVILLE.lng,
-          category,
-          rating,
-          pricePerPerson: priceNum,
-          dishes: dishList,
-          text: text.trim(),
-          photos,
-          tags,
-        });
+        const review = await addReviewForPlace(selected.id, fields);
         router.push(`/review/${review.id}`);
       }
     } catch (e) {
@@ -120,50 +105,31 @@ function CreateForm() {
 
       <div className={styles.form}>
         <label className={styles.label}>Sitio</label>
-        <input
-          className={styles.input}
-          placeholder="Nombre del restaurante / sitio"
-          value={placeName}
-          disabled={placeLocked}
-          onChange={(e) => setPlaceName(e.target.value)}
-        />
-
-        {!placeLocked && (
-          <>
-            <input
-              className={styles.input}
-              placeholder="Dirección (opcional)"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-            <div className={styles.row}>
-              <input
-                className={styles.input}
-                placeholder="Latitud"
-                inputMode="decimal"
-                value={lat}
-                onChange={(e) => setLat(e.target.value)}
-              />
-              <input
-                className={styles.input}
-                placeholder="Longitud"
-                inputMode="decimal"
-                value={lng}
-                onChange={(e) => setLng(e.target.value)}
-              />
+        {placeLocked ? (
+          <div className={styles.lockedPlace}>
+            <span className={styles.lockedName}>{selected?.name}</span>
+            {selected?.address && (
+              <span className={styles.lockedAddr}>{selected.address}</span>
+            )}
+          </div>
+        ) : selected ? (
+          <div className={styles.lockedPlace}>
+            <div>
+              <span className={styles.lockedName}>{selected.name}</span>
+              {selected.address && (
+                <span className={styles.lockedAddr}>{selected.address}</span>
+              )}
             </div>
-            <div className={styles.chips}>
-              {CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  className={`${styles.chip} ${category === c ? styles.chipOn : ""}`}
-                  onClick={() => setCategory(c)}
-                >
-                  {CATEGORY_EMOJI[c]} {c}
-                </button>
-              ))}
-            </div>
-          </>
+            <button
+              type="button"
+              className={styles.changePlace}
+              onClick={() => setSelected(undefined)}
+            >
+              Cambiar
+            </button>
+          </div>
+        ) : (
+          <PlaceSearch onSelect={setSelected} />
         )}
 
         <label className={styles.label}>Valoración</label>

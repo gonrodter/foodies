@@ -38,3 +38,87 @@
   border-color: var(--accent);
   color: #fff;
 }
+
+/* ---- nearby (external Geoapify) ---- */
+.nearbyHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 16px 12px;
+}
+.nearbyTitle {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+}
+.zoneBtn {
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.zoneBtn:disabled {
+  opacity: 0.6;
+}
+.nearError {
+  color: #d33;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 16px 8px;
+}
+
+.extCard {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px dashed rgba(20, 23, 28, 0.16);
+  border-radius: 16px;
+  padding: 13px 14px;
+  cursor: pointer;
+}
+.extCard:active {
+  background: #f3f5f9;
+}
+.extCard:disabled {
+  opacity: 0.5;
+}
+.extMain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.extName {
+  font-weight: 800;
+  font-size: 15px;
+}
+.extTag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #9aa0aa;
+  background: #eef1f6;
+  padding: 2px 7px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.extAddr {
+  font-size: 13px;
+  color: #6b7079;
+  margin-top: 3px;
+}
+.extDist {
+  font-size: 12px;
+  color: #9aa0aa;
+  margin-top: 2px;
+}
+.attrib {
+  font-size: 10px;
+  color: #aab0b9;
+  text-align: center;
+  padding: 12px;
+}
